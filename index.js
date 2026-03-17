@@ -4,7 +4,7 @@ function onSuccess(token) {
     captchaToken = token;
 
     // Send token to backend for verification
-    fetch("http://localhost:3000/verify", {
+    fetch("https://cloudflarecap-m8be.vercel.app/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token })
