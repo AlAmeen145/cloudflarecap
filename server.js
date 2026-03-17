@@ -1,4 +1,11 @@
 import express from "express";
+import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Required for __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -6,6 +13,12 @@ app.use(express.json());
 // Get secret key from environment variable
 const SECRET_KEY = process.env.CLOUDFLARE_SECRET_KEY;
 
+// Serve index.html at root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// Verify Turnstile token
 app.post("/verify", async (req, res) => {
   const { token } = req.body;
 
@@ -30,6 +43,6 @@ app.post("/verify", async (req, res) => {
   }
 });
 
-// Use Vercel's dynamic port
+// Use Vercel's dynamic port or 3000 locally
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
